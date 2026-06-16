@@ -1,0 +1,131 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    height: 100%;
+    width: 100%;
+}
+
+:root{
+    /* background colors */
+    --bg-primary-color: #1b1b1b;
+    --bg-light-board-color: #edd6b0;
+    --bg-dark-board-color: #b88762;
+
+    /* text colors */
+    --text-primary-color: #f0f0f0;
+
+    /* spacing variables */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 40px;
+    --space-3xl: 48px;
+
+    /* border colors */
+    --border-primary-color: #333333;
+
+    /* border radius */
+    --border-radius-xs: 4px;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-2xl: 24px;
+}
+
+html{
+    background-color: var(--bg-primary-color);
+    color: var(--text-primary-color);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.flex-container{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.chessboard {
+    width: 80vmin;
+    aspect-ratio: 1;
+    background:
+        conic-gradient(
+            var(--bg-dark-board-color) 25%,
+            var(--bg-light-board-color) 0 50%,
+            var(--bg-dark-board-color) 0 75%,
+            var(--bg-light-board-color) 0
+        );
+    background-size: 25% 25%;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+}
+
+/* Pieces */
+.pieces {
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    will-change: transform;
+    cursor: pointer;
+    cursor: grab;
+}
+
+/* Black Pieces */
+.bb {
+    background-image: url('../assets/bb.png');
+}
+
+.bk {
+    background-image: url('../assets/bk.png');
+}
+
+.bn {
+    background-image: url('../assets/bn.png');
+}
+
+.bp {
+    background-image: url('../assets/bp.png');
+}
+
+.bq {
+    background-image: url('../assets/bq.png');
+}
+
+.br {
+    background-image: url('../assets/br.png');
+}
+
+/* White Pieces */
+.wb {
+    background-image: url('../assets/wb.png');
+}
+
+.wk {
+    background-image: url('../assets/wk.png');
+}
+
+.wn {
+    background-image: url('../assets/wn.png');
+}
+
+.wp {
+    background-image: url('../assets/wp.png');
+}
+
+.wq {
+    background-image: url('../assets/wq.png');
+}
+
+.wr {
+    background-image: url('../assets/wr.png');
+}
