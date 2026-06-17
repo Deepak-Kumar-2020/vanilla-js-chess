@@ -80,6 +80,10 @@ html{
     cursor: grab;
 }
 
+.pieces:active {
+    border: 3px solid #ffffffca;
+}
+
 /* Black Pieces */
 .bb {
     background-image: url('../assets/bb.png');
@@ -128,4 +132,10 @@ html{
 
 .wr {
     background-image: url('../assets/wr.png');
+}
+
+.selected {
+    box-sizing: border-box;
+    background-color: var(--bg-selected-color);
+    transition: transform 0.1s ease, background-color 0.1s ease;
 }
