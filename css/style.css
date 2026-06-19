@@ -14,6 +14,7 @@ html, body{
     --bg-primary-color: #1b1b1b;
     --bg-light-board-color: #edd6b0;
     --bg-dark-board-color: #b88762;
+    --bg-selected-color: #f4f880;
 
     /* text colors */
     --text-primary-color: #f0f0f0;

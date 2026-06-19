@@ -7,6 +7,22 @@ function valid_move(piece, current, destination) {
         return rook_moves(current, destination);
     }
 
+    else if (piece[1] == 'q') {
+        return bishop_moves(current, destination) || rook_moves(current, destination);
+    }
+
+    else if (piece[1] == 'n') {
+        return knight_moves(current, destination);
+    }
+
+    else if (piece == "wp") {
+        return wp_moves(current, destination);
+    }
+
+    else if (piece == "bp") {
+        return bp_moves(current, destination);
+    }
+
     return true;
 }
 
@@ -107,6 +123,107 @@ function rook_moves(current, destination) {
         return true;
 
         else if (board[trow][curr_col] !== "") break;
+    }
+
+    return false;
+}
+
+function knight_moves(current, destination) {
+    let curr_row = +current[0];
+    let curr_col = +current[1];
+
+    let dest_row = +destination[0];
+    let dest_col = +destination[1];
+
+    // let top1 = curr_row - 2
+    // top1
+    if (curr_row - 2 == dest_row) {
+        if (curr_col - 1 == dest_col)
+        return true;
+
+        if (curr_col + 1 == dest_col)
+        return true;
+    }
+
+    // down
+    if (curr_row + 2 == dest_row) {
+        if (curr_col - 1 == dest_col)
+        return true;
+        
+        if (curr_col + 1 == dest_col)
+        return true;
+    }
+
+    // left
+    if (curr_col - 2 == dest_col) {
+        if (curr_row - 1 == dest_row)
+        return true;
+
+        if (curr_row + 1 == dest_row)
+        return true;
+    }
+
+    // right
+    if (curr_col + 2 == dest_col) {
+        if (curr_row - 1 == dest_row)
+        return true;
+
+        if (curr_row + 1 == dest_row)
+        return true;
+    }
+
+    return false;
+}
+
+function wp_moves(current, destination) {
+    let curr_row = +current[0];
+    let curr_col = +current[1];
+
+    let dest_row = +destination[0];
+    let dest_col = +destination[1];
+
+    if (curr_col == dest_col) {
+        if (board[dest_row][dest_col] == "") {
+            if (curr_row == 6 && curr_row - 2 == dest_row) {
+                if (board[curr_row - 1][dest_col] == "") 
+                return true;
+            }
+
+            else if (curr_row - 1 == dest_row)
+            return true;
+        }
+    }
+
+    else if (curr_col - 1 == dest_col || curr_col + 1 == dest_col) {
+        if (curr_row - 1 == dest_row && board[dest_row][dest_col] !== "")
+        return true;
+    }
+
+    return false;
+}
+
+function bp_moves(current, destination) {
+    let curr_row = +current[0];
+    let curr_col = +current[1];
+
+    let dest_row = +destination[0];
+    let dest_col = +destination[1];
+
+    if (curr_col == dest_col) {
+        if (board[dest_row][dest_col] == "") {
+            if (curr_row == 1 && curr_row + 2 == dest_row) {
+                if (board[curr_row + 1][dest_col] == "")
+                return true;
+            }
+
+            else if (curr_row + 1 == dest_row)
+            return true;
+        }
+    }
+
+    else if (curr_col - 1 == dest_col || curr_col + 1 == dest_col) {
+        if (curr_row + 1 == dest_row && board[dest_row][dest_col] !== "")
+        return true;
     }
 
     return false;
