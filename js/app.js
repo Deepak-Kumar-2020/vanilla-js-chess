@@ -1,8 +1,10 @@
+let turn = 'w';
 let previous = null;
-chessBoard.addEventListener('click', (e) => {
+
+function handleClick(e) {
     console.log(e.target);
 
-    if (previous == null && e.target.classList.length > 1) {
+    if (previous == null && e.target.classList.length > 1 && e.target.classList[1][0] == turn) {
         previous = e.target;
         previous.classList.add("selected");
     }
@@ -23,6 +25,8 @@ chessBoard.addEventListener('click', (e) => {
                     movePiece(e);
                     resetPrevious();
                 }
+
+                turn = turn == 'w' ? 'b' : 'w';
             }
 
             else if (e.target.classList.length == 2 && e.target.classList[1][0] == previous.classList[1][0]) {
@@ -34,7 +38,8 @@ chessBoard.addEventListener('click', (e) => {
 
         else resetPrevious();
     }
-});
+}
+
 
 function capture(e) {
     board[previous.id[0]][previous.id[1]] = "";
@@ -61,3 +66,6 @@ function resetPrevious() {
     previous.classList.remove("selected");
     previous = null;
 }
+
+const handler = (e) => handleClick(e);
+chessBoard.addEventListener("click", handler);

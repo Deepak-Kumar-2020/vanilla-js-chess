@@ -75,6 +75,7 @@ function bishop_moves(current, destination) {
     return false;
 }
 
+
 function rook_moves(current, destination) {
     let curr_row = +current[0];
     let curr_col = +current[1];
@@ -175,6 +176,7 @@ function knight_moves(current, destination) {
     return false;
 }
 
+let previous_pawn_move = null;
 function wp_moves(current, destination) {
     let curr_row = +current[0];
     let curr_col = +current[1];
@@ -189,14 +191,18 @@ function wp_moves(current, destination) {
                 return true;
             }
 
-            else if (curr_row - 1 == dest_row)
-            return true;
+            else if (curr_row - 1 == dest_row) {
+                if (dest_row == 0) pawnPromotion("w", destination);
+                return true;
+            }
         }
     }
 
     else if (curr_col - 1 == dest_col || curr_col + 1 == dest_col) {
-        if (curr_row - 1 == dest_row && board[dest_row][dest_col] !== "")
-        return true;
+        if (curr_row - 1 == dest_row && board[dest_row][dest_col] !== "") {
+            if (dest_row == 0) pawnPromotion("w", destination);
+            return true;
+        }
     }
 
     return false;
@@ -216,14 +222,18 @@ function bp_moves(current, destination) {
                 return true;
             }
 
-            else if (curr_row + 1 == dest_row)
-            return true;
+            else if (curr_row + 1 == dest_row) {
+                if (dest_row == 7) pawnPromotion("b", destination);
+                return true;
+            }
         }
     }
 
     else if (curr_col - 1 == dest_col || curr_col + 1 == dest_col) {
-        if (curr_row + 1 == dest_row && board[dest_row][dest_col] !== "")
-        return true;
+        if (curr_row + 1 == dest_row && board[dest_row][dest_col] !== "") {
+            if (dest_row == 7) pawnPromotion("b", destination);
+            return true;
+        }
     }
 
     return false;
