@@ -15,6 +15,10 @@ function valid_move(piece, current, destination) {
         return knight_moves(current, destination);
     }
 
+    else if (piece[1] == 'k') {
+        return king_moves(current, destination);
+    }
+
     else if (piece == "wp") {
         return wp_moves(current, destination);
     }
@@ -174,6 +178,78 @@ function knight_moves(current, destination) {
     }
 
     return false;
+}
+
+function king_moves(current, destination) {
+    let curr_row = +current[0];
+    let curr_col = +current[1];
+
+    let dest_row = +destination[0];
+    let dest_col = +destination[1];
+
+    if (curr_col + 2 == dest_col && curr_row == dest_row) {
+        return castle(current, destination, 1);
+    }
+
+    else if (curr_col - 2 == dest_col && curr_row == dest_row) {
+        return castle(current, destination, -1);
+    }
+
+    for (let i = curr_row - 1; i <= curr_row + 1; i++) {
+        for (let j = curr_col - 1; j <= curr_col + 1; j++) {
+            if (i == dest_row && j == dest_col) {
+                if (wk_first_move) wk_first_move = false;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function castle(current, destination, sign) {
+    let curr_row = +current[0];
+    let curr_col = +current[1];
+
+    let dest_row = +destination[0];
+    let dest_col = +destination[1];
+
+    if (sign == 1) {
+        if (board[curr_row][curr_col + 1] == "" && board[curr_row][curr_col + 2] == "") {            
+            if (curr_row == 0 && bk_first_move && br_right) {
+                update_state_castle(curr_row, 7, dest_col, sign)
+                bk_first_move = false;
+                castle_rook(0, 7, dest_col - 1);
+                return true;
+            }
+        
+            else if (curr_row == 7 && wk_first_move && wr_right) {
+                update_state_castle(curr_row, 7, dest_col, sign)
+                wk_first_move = false;
+                castle_rook(7, 7, dest_col - 1);
+                return true;
+            }
+        }
+    }
+
+    else {
+        if (board[curr_row][curr_col - 1] == "" && board[curr_row][curr_col - 2] == "" && board[curr_row][curr_col - 3] == "") {
+            if (curr_row == 0 && bk_first_move && br_left) {
+                update_state_castle(curr_row, 0, dest_col, sign);
+                bk_first_move = false;
+                castle_rook(0, 0, dest_col + 1);
+                return true;
+            }
+
+            else if (curr_row == 7 && wk_first_move && wr_left) {
+                update_state_castle(curr_row, 7, dest_col, sign);
+                wk_first_move = false;
+                castle_rook(7, 0, dest_col + 1);
+                return true;
+
+            }
+        }
+    }
+    return false;  
 }
 
 let previous_pawn_move = null;

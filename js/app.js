@@ -11,31 +11,34 @@ function handleClick(e) {
     
     else if (previous != null) {
         if (e.target.id != previous.id) {
-            if (valid_move(previous.classList[1], previous.id, e.target.id)) {
-                if (e.target.classList.length == 2) {
-                    if (e.target.classList[1][0] != previous.classList[1][0]) {
-                        capture(e);
-                        resetPrevious();
+            if (e.target.classList.length == 2) {
+                if (e.target.classList[1][0] == previous.classList[1][0])
+                changeSelection(e);
+
+                else if (valid_move(previous.classList[1], previous.id, e.target.id)) {
+                    if (previous_pawn_move != null) previous_pawn_move = null;
+                    if (previous.classList[1][1] == 'p' && (e.target.id[0] == 7 || e.target.id[0] == 0)) {
+                        pawn_promotion(previous.classList[1][0], e.target.id);
                     }
-
-                    else changeSelection(e);
-                }
-
-                else {
-                    movePiece(e);
+                    capture(e);
                     resetPrevious();
+                    turn = (turn == 'w') ? 'b' : 'w';
                 }
-
-                turn = turn == 'w' ? 'b' : 'w';
             }
 
-            else if (e.target.classList.length == 2 && e.target.classList[1][0] == previous.classList[1][0]) {
-                changeSelection(e);
+            else if (valid_move(previous.classList[1], previous.id, e.target.id)) {
+                if (previous_pawn_move != null) previous_pawn_move = null;
+                if (previous.classList[1][1] == 'p' && (e.target.id[0] == 7 || e.target.id[0] == 0)) {
+                    pawn_promotion(previous.classList[1][0], e.target.id);
+                }
+                movePiece(e);
+                resetPrevious();
+                turn = (turn == 'w') ? 'b' : 'w';
             }
 
             else resetPrevious();
         }
-
+        
         else resetPrevious();
     }
 }

@@ -1,16 +1,5 @@
 const chessBoard = document.querySelector(".chessboard");
 
-const board = [
-    ["br", "bn", "bb", "bq", "bk", "bb", "bn", "br"],
-    ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
-    ["wr", "wn", "wb", "wq", "wk", "wb", "wn", "wr"]
-];
-
 for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
         const box = document.createElement("div");
@@ -19,7 +8,7 @@ for (let r = 0; r < 8; r++) {
             box.classList.add(board[r][c]);
         }
         box.id = `${r}${c}`;
-        chessBoard.appendChild(box);  
+        chessBoard.appendChild(box);
     }
 }
 
@@ -63,4 +52,12 @@ function promotionClick(e) {
         box.classList.remove(box.classList[1]);
     }
     chessBoard.addEventListener("click", handler);
+}
+
+function castle_rook(row, curr_col, dest_col) {
+    const curr_rook = document.getElementById(`${row}${curr_col}`);
+    const dest_rook = document.getElementById(`${row}${dest_col}`);
+
+    dest_rook.classList.add(curr_rook.classList[1]);
+    curr_rook.classList.remove(curr_rook.classList[1]);
 }
