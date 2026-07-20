@@ -8,7 +8,7 @@ for (let r = 0; r < 8; r++) {
             box.classList.add(board[r][c]);
         }
         box.id = `${r}${c}`;
-        chessBoard.appendChild(box);
+        chessBoard.appendChild(box);  
     }
 }
 
@@ -18,7 +18,7 @@ let promo_row;
 let promo_col;
 let pawn;
 
-function pawnPromotion(pawn_color, destination) {
+function pawn_promotion(pawn_color, destination) {
     promo_row = +destination[0];
     promo_col = +destination[1];
     pawn = pawn_color;
@@ -54,7 +54,7 @@ function promotionClick(e) {
     chessBoard.addEventListener("click", handler);
 }
 
-function castle_rook(row, curr_col, dest_col) {
+function castle_rook_ui(row, curr_col, dest_col) {
     const curr_rook = document.getElementById(`${row}${curr_col}`);
     const dest_rook = document.getElementById(`${row}${dest_col}`);
 

@@ -16,7 +16,7 @@ function valid_move(piece, current, destination) {
     }
 
     else if (piece[1] == 'k') {
-        return king_moves(current, destination);
+        return king_moves(current, destination, piece[0]);
     }
 
     else if (piece == "wp") {
@@ -94,10 +94,8 @@ function rook_moves(current, destination) {
     let tcol = curr_col;
     while (tcol > 0) {
         tcol--;
-        if (curr_row == dest_row && tcol == dest_col) {
-            update_rook_fm(curr_row, curr_col);
-            return true;
-        }
+        if (curr_row == dest_row && tcol == dest_col)
+        return true;
 
         else if (board[curr_row][tcol] !== "") break;
     }
@@ -106,11 +104,9 @@ function rook_moves(current, destination) {
     tcol = curr_col;
     while (tcol < 7) {
         tcol++;
-        if (curr_row == dest_row && tcol == dest_col) {
-            update_rook_fm(curr_row, curr_col);
-            return true;
-        }
-
+        if (curr_row == dest_row && tcol == dest_col)
+        return true;
+        
         else if (board[curr_row][tcol] !== "") break;
     }
 
@@ -118,11 +114,8 @@ function rook_moves(current, destination) {
     let trow = curr_row;
     while (trow > 0) {
         trow--;
-        if (trow == dest_row && curr_col == dest_col) {
-            update_rook_fm(curr_row, curr_col);
-            return true;
-        }
-        
+        if (trow == dest_row && curr_col == dest_col)
+        return true;
 
         else if (board[trow][curr_col] !== "") break;
     }
@@ -131,10 +124,8 @@ function rook_moves(current, destination) {
     trow = curr_row;
     while (trow < 7) {
         trow++;
-        if (trow == dest_row && curr_col == dest_col) {
-            update_rook_fm(curr_row, curr_col);
+        if (trow == dest_row && curr_col == dest_col)
             return true;
-        }
 
         else if (board[trow][curr_col] !== "") break;
     }
@@ -189,80 +180,50 @@ function knight_moves(current, destination) {
     return false;
 }
 
-function king_moves(current, destination) {
+function king_moves(current, destination, color) {
     let curr_row = +current[0];
     let curr_col = +current[1];
 
     let dest_row = +destination[0];
     let dest_col = +destination[1];
 
+    // castle check on right side
     if (curr_col + 2 == dest_col && curr_row == dest_row) {
-        return castle(current, destination, 1);
+        if (color == 'b') {
+            if (bk_first_move && br_right)
+            return true;
+        }
+        
+        else if (color == 'w') {
+            if (wk_first_move && wr_right)
+            return true;
+        }
     }
 
+        // castle check on left side
     else if (curr_col - 2 == dest_col && curr_row == dest_row) {
-        return castle(current, destination, -1);
+        if (color == 'b') {
+            if (bk_first_move && br_left)
+            return true;
+        }
+        
+        else if (color == 'w') {
+            if (wk_first_move && wr_left)
+            return true;
+        }
     }
+    
 
     for (let i = curr_row - 1; i <= curr_row + 1; i++) {
         for (let j = curr_col - 1; j <= curr_col + 1; j++) {
-            if (i == dest_row && j == dest_col) {
-                if (wk_first_move) wk_first_move = false;
-                return true;
-            }
+            if (i == dest_row && j == dest_col)
+            return true;    
         }
     }
 
     return false;
 }
 
-function castle(current, destination, sign) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
-
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
-
-    if (sign == 1) {
-        if (board[curr_row][curr_col + 1] == "" && board[curr_row][curr_col + 2] == "") {            
-            if (curr_row == 0 && bk_first_move && br_right) {
-                update_state_castle(curr_row, 7, dest_col, sign)
-                bk_first_move = false;
-                castle_rook(0, 7, dest_col - 1);
-                return true;
-            }
-        
-            else if (curr_row == 7 && wk_first_move && wr_right) {
-                update_state_castle(curr_row, 7, dest_col, sign)
-                wk_first_move = false;
-                castle_rook(7, 7, dest_col - 1);
-                return true;
-            }
-        }
-    }
-
-    else {
-        if (board[curr_row][curr_col - 1] == "" && board[curr_row][curr_col - 2] == "" && board[curr_row][curr_col - 3] == "") {
-            if (curr_row == 0 && bk_first_move && br_left) {
-                update_state_castle(curr_row, 0, dest_col, sign);
-                bk_first_move = false;
-                castle_rook(0, 0, dest_col + 1);
-                return true;
-            }
-
-            else if (curr_row == 7 && wk_first_move && wr_left) {
-                update_state_castle(curr_row, 7, dest_col, sign);
-                wk_first_move = false;
-                castle_rook(7, 0, dest_col + 1);
-                return true;
-
-            }
-        }
-    }
-    return false;  
-}
-
-let previous_pawn_move = null;
 function wp_moves(current, destination) {
     let curr_row = +current[0];
     let curr_col = +current[1];
@@ -271,29 +232,22 @@ function wp_moves(current, destination) {
     let dest_col = +destination[1];
 
     if (curr_col == dest_col) {
-        if (board[dest_row][dest_col] == "") {
-            if (curr_row == 6 && curr_row - 2 == dest_row) {
-                if (board[curr_row - 1][dest_col] == "") {
-                    previous_pawn_move = destination;
-                    return true;
-                }
+        if (curr_row - 2 == dest_row && curr_row == 6) {
+            if (board[curr_row - 1][dest_col] == "" && board[curr_row - 2][dest_col] == "") {
+                return true;
             }
-
-            else if (curr_row - 1 == dest_row)
-            return true;
-            
         }
+
+        else if (curr_row - 1 == dest_row && board[dest_row][dest_col] == "")
+        return true;
     }
 
-    else if (curr_col - 1 == dest_col || curr_col + 1 == dest_col) {
-        if (curr_row - 1 == dest_row && board[dest_row][dest_col] !== "")
+    else if ((curr_col - 1 == dest_col || curr_col + 1 == dest_col) && curr_row - 1 == dest_row) {
+        if (board[dest_row][dest_col] !== "")
         return true;
 
-        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1]) {
-            en_passant(previous_pawn_move);
-            previous_pawn_move = null;
-            return true;
-        }
+        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1])
+        return true;
     }
 
     return false;
@@ -307,40 +261,23 @@ function bp_moves(current, destination) {
     let dest_col = +destination[1];
 
     if (curr_col == dest_col) {
-        if (board[dest_row][dest_col] == "") {
-            if (curr_row == 1 && curr_row + 2 == dest_row) {
-                if (board[curr_row + 1][dest_col] == "") {
-                    previous_pawn_move = destination;
-                    return true;
-                }
+        if (curr_row + 2 == dest_row && curr_row == 1) {
+            if (board[curr_row + 1][dest_col] == "" && board[curr_row + 2][dest_col] == "") {
+                return true;
             }
-
-            else if (curr_row + 1 == dest_row)
-            return true;
-            
         }
+
+        else if (curr_row + 1 == dest_row && board[dest_row][dest_col] == "")
+        return true;
     }
 
-    else if (curr_col - 1 == dest_col || curr_col + 1 == dest_col) {
-        if (curr_row + 1 == dest_row && board[dest_row][dest_col] !== "")
+    else if ((curr_col - 1 == dest_col || curr_col + 1 == dest_col) && curr_row + 1 == dest_row) {
+        if (board[dest_row][dest_col] !== "")
         return true;
-        
-        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1]) {
-            en_passant(previous_pawn_move);
-            return true;
-        }
+
+        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1])
+        return true;
     }
 
     return false;
-}
-
-function en_passant(previous_pawn_move) {
-    let row = previous_pawn_move[0];
-    let col = previous_pawn_move[1];
-    console.log("en_passant");
-    const previous_pawn = document.getElementById(previous_pawn_move);
-    previous_pawn.classList.remove(previous_pawn.classList[1]);
-    board[row][col] = "";
-    console.log(previous_pawn);
-
 }
