@@ -72,8 +72,12 @@ function update_state(piece, current, destination) {
             previous_pawn_color = color;
         }
 
-        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1])
-        en_passant();
+        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1]) {
+            let row = previous_pawn_move[0];
+            let col = previous_pawn_move[1];
+            board[row][col] = "";
+            en_passant();
+        }
     }
 
     if (previous_pawn_color != color) {
@@ -82,16 +86,38 @@ function update_state(piece, current, destination) {
     }
 }
 
+function update_board(e) {
+    board[previous.id[0]][previous.id[1]] = "";
+    board[e.target.id[0]][e.target.id[1]] = previous.classList[1];
+}
+
+function undo_board(e) {
+    board[previous.id[0]][previous.id[1]] = previous.classList[1];
+    board[e.target.id[0]][e.target.id[1]] = "";
+}
+
 function update_state_castle(curr_row, rook_col, dest_col, sign) {
     board[curr_row][dest_col - (sign)] = board[curr_row][rook_col];
     board[curr_row][rook_col] = "";
 }
 
-function en_passant() {
-    let row = previous_pawn_move[0];
-    let col = previous_pawn_move[1];
+function findKing(color) {
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (board[i][j] == `${color}k`) {
+                return `${i}${j}`;
+            }
+        }
+    }
+}
 
-    const previous_pawn = document.getElementById(previous_pawn_move);
-    previous_pawn.classList.remove(previous_pawn.classList[1]);
-    board[row][col] = "";
+function canAttack(location, color) {
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (board[i][j] != "" && board[i][j][0] != color) {
+                if(attack(board[i][j], `${i}${j}`, location)) return true;
+            }
+        }
+    }
+    return false;
 }

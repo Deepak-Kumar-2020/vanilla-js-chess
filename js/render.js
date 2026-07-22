@@ -54,6 +54,11 @@ function promotionClick(e) {
     chessBoard.addEventListener("click", handler);
 }
 
+function en_passant() {
+    const previous_pawn = document.getElementById(previous_pawn_move);
+    previous_pawn.classList.remove(previous_pawn.classList[1]);
+}
+
 function castle_rook_ui(row, curr_col, dest_col) {
     const curr_rook = document.getElementById(`${row}${curr_col}`);
     const dest_rook = document.getElementById(`${row}${dest_col}`);

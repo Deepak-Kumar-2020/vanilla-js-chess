@@ -29,30 +29,39 @@ function handleClick(e) {
     }
 }
 
-
 function capture(e) {
-    board[previous.id[0]][previous.id[1]] = "";
-    board[e.target.id[0]][e.target.id[1]] = previous.classList[1];
-    update_state(previous.classList[1], previous.id, e.target.id);
-    e.target.classList.remove(e.target.classList[1]);
-    e.target.classList.add(previous.classList[1]);
-    previous.classList.remove(previous.classList[1]);
-    turn = (turn == 'w') ? 'b' : 'w';
+    update_board(e);
+    king_location = findKing(turn);
+    kingInCheck = canAttack(king_location, turn);
+    
+    if (kingInCheck) undo_board(e);
+    else {
+        update_state(previous.classList[1], previous.id, e.target.id);
+        e.target.classList.remove(e.target.classList[1]);
+        e.target.classList.add(previous.classList[1]);
+        previous.classList.remove(previous.classList[1]);
+        turn = (turn == 'w') ? 'b' : 'w';
+    }
+}
+
+function movePiece(e) {
+    update_board(e);
+    king_location = findKing(turn);
+    kingInCheck = canAttack(king_location, turn);
+
+    if (kingInCheck) undo_board(e);
+    else {
+        update_state(previous.classList[1], previous.id, e.target.id);
+        e.target.classList.add(previous.classList[1]);
+        previous.classList.remove(previous.classList[1]);
+        turn = (turn == 'w') ? 'b' : 'w';
+    }
 }
 
 function changeSelection(e) {
     previous.classList.remove("selected");
     previous = e.target;
     previous.classList.add("selected");
-}
-
-function movePiece(e) {
-    board[previous.id[0]][previous.id[1]] = "";
-    board[e.target.id[0]][e.target.id[1]] = previous.classList[1];
-    update_state(previous.classList[1], previous.id, e.target.id);
-    e.target.classList.add(previous.classList[1]);
-    previous.classList.remove(previous.classList[1]);
-    turn = (turn == 'w') ? 'b' : 'w';
 }
 
 function resetPrevious() {

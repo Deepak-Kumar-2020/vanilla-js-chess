@@ -26,8 +26,6 @@ function valid_move(piece, current, destination) {
     else if (piece == "bp") {
         return bp_moves(current, destination);
     }
-
-    return true;
 }
 
 function bishop_moves(current, destination) {
@@ -189,30 +187,34 @@ function king_moves(current, destination, color) {
 
     // castle check on right side
     if (curr_col + 2 == dest_col && curr_row == dest_row) {
+        // squares of castle in check or not
+        let attack_on_squares = canAttack(`${curr_row}${curr_col + 1}`, color) || canAttack(`${curr_row}${curr_col + 2}`, color) || kingInCheck;
+
         if (color == 'b') {
-            if (bk_first_move && br_right)
+            if (bk_first_move && br_right && !attack_on_squares)
             return true;
         }
         
         else if (color == 'w') {
-            if (wk_first_move && wr_right)
+            if (wk_first_move && wr_right && !attack_on_squares)
             return true;
         }
     }
 
-        // castle check on left side
+    // castle check on left side
     else if (curr_col - 2 == dest_col && curr_row == dest_row) {
+        let attack_on_squares = canAttack(`${curr_row}${curr_col - 1}`, color) || canAttack(`${curr_row}${curr_col - 2}`, color) || kingInCheck;
+
         if (color == 'b') {
-            if (bk_first_move && br_left)
+            if (bk_first_move && br_left && !attack_on_squares)
             return true;
         }
         
         else if (color == 'w') {
-            if (wk_first_move && wr_left)
+            if (wk_first_move && wr_left && !attack_on_squares)
             return true;
         }
     }
-    
 
     for (let i = curr_row - 1; i <= curr_row + 1; i++) {
         for (let j = curr_col - 1; j <= curr_col + 1; j++) {
