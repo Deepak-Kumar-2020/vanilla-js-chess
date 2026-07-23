@@ -121,3 +121,34 @@ function canAttack(location, color) {
     }
     return false;
 }
+
+function hasLegalMove(color) {
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            let piece = board[r][c];
+
+            if (piece == "" || piece[0] !== color) continue;
+
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    let target = board[i][j];
+
+                    if (target !== "" && target[0] === color) continue;
+                    if (!valid_move(board[r][c], `${r}${c}`, `${i}${j}`)) continue;
+                      
+                    board[i][j] = piece;
+                    board[r][c] = "";
+
+                    let kingPos = findKing(color);
+                    let legal = !canAttack(kingPos, color);
+
+                    board[r][c] = piece;
+                    board[i][j] = target;
+
+                    if (legal) return true; 
+                }
+            }
+        }
+    }
+    return false;
+}

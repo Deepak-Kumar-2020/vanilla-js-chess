@@ -1,6 +1,4 @@
 function handleClick(e) {
-    console.log(e.target);
-
     if (previous == null && e.target.classList.length > 1 && e.target.classList[1][0] == turn) {
         previous = e.target;
         previous.classList.add("selected");
@@ -41,6 +39,16 @@ function capture(e) {
         e.target.classList.add(previous.classList[1]);
         previous.classList.remove(previous.classList[1]);
         turn = (turn == 'w') ? 'b' : 'w';
+
+        king_location = findKing(turn);
+        kingInCheck = canAttack(king_location, turn);
+        if (kingInCheck && !hasLegalMove(turn)) {
+            console.log("Checkmate");
+        }
+
+        else if (!kingInCheck && !hasLegalMove(turn)) {
+            console.log("Stalemate");
+        }    
     }
 }
 
@@ -55,6 +63,16 @@ function movePiece(e) {
         e.target.classList.add(previous.classList[1]);
         previous.classList.remove(previous.classList[1]);
         turn = (turn == 'w') ? 'b' : 'w';
+
+        king_location = findKing(turn);
+        kingInCheck = canAttack(king_location, turn);
+        if (kingInCheck && !hasLegalMove(turn)) {
+            console.log("Checkmate");
+        }
+
+        else if (!kingInCheck && !hasLegalMove(turn)) {
+            console.log("Stalemate");
+        }
     }
 }
 
