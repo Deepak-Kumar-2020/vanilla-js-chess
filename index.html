@@ -3,17 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess Game</title>
-    
-    <link rel="stylesheet" href="css/style.css">
+    <title>Chess</title>
+    <link rel="stylesheet" href="./css/style.css">
 
-    <script src="js/state.js" defer></script>
-    <script src="js/render.js" defer></script>
-    <script src="js/moves.js" defer></script>
-    <script src="js/app.js" defer></script>
+    <script src="./js/menu.js" defer></script>
+    <script src="./js/state.js" defer></script>
+    <script src="./js/render.js" defer></script>
+    <script src="./js/moves.js" defer></script>
+    <script src="./js/threats.js" defer></script>
+    <script src="./js/controller.js" defer></script>
+    <script src="./js/clock.js" defer></script>
 </head>
 <body>
-    <main class="flex-container">
+    <body>
+    <!-- The Start Menu -->
+    <div class="setup-container" id="startMenu">
+        <div class="header">
+            <h1>Play Local Chess</h1>
+            <p>Pass and play with a friend on this device</p>
+        </div>
+
+        <div class="section-title">Players</div>
+        <div class="player-inputs">
+            <div class="input-group">
+            <input type="text" id="player1" placeholder="Player 1 (White)" value="White">
+            </div>
+            <div class="input-group">
+            <input type="text" id="player2" placeholder="Player 2 (Black)" value="Black">
+            </div>
+        </div>
+
+        <div class="section-title">Time Control</div>
+        <div class="time-grid" id="timeGrid">
+            <button class="time-btn" data-time="3">
+                <div class="time-val">3 min</div>
+                <div class="time-type">Blitz</div>
+            </button>
+            <button class="time-btn" data-time="5">
+                <div class="time-val">5 min</div>
+                <div class="time-type">Blitz</div>
+            </button>
+            <button class="time-btn active" data-time="10">
+                <div class="time-val">10 min</div>
+                <div class="time-type">Rapid</div>
+            </button>
+            <button class="time-btn" data-time="15">
+                <div class="time-val">15 | 5</div>
+                <div class="time-type">Rapid</div>
+            </button>
+            <button class="time-btn" data-time="30">
+                <div class="time-val">30 min</div>
+                <div class="time-type">Classical</div>
+            </button>
+            <button class="time-btn" data-time="unlimited">
+                <div class="time-val">∞</div>
+                <div class="time-type">Unlimited</div>
+            </button>
+        </div>
+
+        <button class="start-btn" id="startBtn">Start Game</button>
+    </div>
+    
+    <!-- The Game Area -->
+    <div class="flex-container hidden" id="gameArea">
+        <div class="player-info black-name">
+            <div id="black-clock"></div>
+            <div id="black-name">Black</div>
+        </div>
         <div class="chessboard">
             <div class="promo_menu">
                 <div class="promo_box" id="q"></div>
@@ -22,6 +78,20 @@
                 <div class="promo_box" id="n"></div>
             </div>
         </div>
-    </main>
+        <div class="player-info white-name">
+            <div id="white-clock"></div>
+            <div id="white-name">White</div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div class="game-over-container hidden" id="gameOverScreen">
+        <div class="winner-icon" id="winnerIcon">👑</div>
+        <div class="header">
+            <h1 class="game-over-title" id="gameOverTitle">Checkmate!</h1>
+            <p class="game-over-subtitle" id="gameOverMessage">White wins the game.</p>
+        </div>
+        <button class="start-btn" id="newGameBtn">New Game</button>
+    </div>
 </body>
 </html>

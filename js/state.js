@@ -1,29 +1,40 @@
-let turn = 'w';
-let previous = null;
-let king_location = null;
-let kingInCheck = false;
+let turn, previous, gameStarted, 
+    king_location, kingInCheck, 
+    br_left, br_right, bk_first_move, 
+    wr_left, wr_right, wk_first_move, 
+    previous_pawn_move, previous_pawn_color,
+    board;
 
-let br_left = true;
-let br_right = true;
-let bk_first_move = true;
+function setup_state() {
+    turn = 'w';
+    previous = null;
+    gameStarted = false;
 
-let wr_left = true;
-let wr_right = true;
-let wk_first_move = true;
+    king_location = null;
+    kingInCheck = false;
 
-let previous_pawn_move = null;
-let previous_pawn_color = null;
+    br_left = true;
+    br_right = true;
+    bk_first_move = true;
 
-const board = [
-    ["br", "bn", "bb", "bq", "bk", "bb", "bn", "br"],
-    ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
-    ["wr", "wn", "wb", "wq", "wk", "wb", "wn", "wr"]
-];
+    wr_left = true;
+    wr_right = true;
+    wk_first_move = true;
+
+    previous_pawn_move = null;
+    previous_pawn_color = null;
+
+    board = [
+        ["br", "bn", "bb", "bq", "bk", "bb", "bn", "br"],
+        ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
+        ["wr", "wn", "wb", "wq", "wk", "wb", "wn", "wr"]
+    ];
+}
 
 function update_state(piece, current, destination) {
     let curr_row = +current[0], trow = curr_row;

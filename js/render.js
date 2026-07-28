@@ -1,14 +1,21 @@
 const chessBoard = document.querySelector(".chessboard");
 
-for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-        const box = document.createElement("div");
-        box.classList.add("pieces");
-        if (board[r][c] !== "") {
-            box.classList.add(board[r][c]);
+function render_board() {
+    if (!document.getElementById("00")) {
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const box = document.createElement("div");
+                box.id = `${r}${c}`;
+                chessBoard.appendChild(box);
+            }
         }
-        box.id = `${r}${c}`;
-        chessBoard.appendChild(box);  
+    }
+
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            const box = document.getElementById(`${r}${c}`);
+            box.className = board[r][c] ? `pieces ${board[r][c]}` : "pieces";
+        }
     }
 }
 

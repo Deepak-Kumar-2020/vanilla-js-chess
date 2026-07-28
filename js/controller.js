@@ -1,4 +1,9 @@
 function handleClick(e) {
+    if (!gameStarted && selectedTime != "unlimited") {
+        startClock();
+        gameStarted = true;
+    }
+
     if (previous == null && e.target.classList.length > 1 && e.target.classList[1][0] == turn) {
         previous = e.target;
         previous.classList.add("selected");
@@ -32,23 +37,27 @@ function capture(e) {
     king_location = findKing(turn);
     kingInCheck = canAttack(king_location, turn);
     
-    if (kingInCheck) undo_board(e);
+    if (kingInCheck) {
+        undo_board(e);
+    }
     else {
         update_state(previous.classList[1], previous.id, e.target.id);
         e.target.classList.remove(e.target.classList[1]);
         e.target.classList.add(previous.classList[1]);
         previous.classList.remove(previous.classList[1]);
+
+        if (selectedTime != "unlimited") toggleClock();
         turn = (turn == 'w') ? 'b' : 'w';
 
         king_location = findKing(turn);
         kingInCheck = canAttack(king_location, turn);
         if (kingInCheck && !hasLegalMove(turn)) {
-            console.log("Checkmate");
+            gameOver(1, turn);
         }
 
         else if (!kingInCheck && !hasLegalMove(turn)) {
-            console.log("Stalemate");
-        }    
+            gameOver(0, turn);
+        }
     }
 }
 
@@ -62,16 +71,19 @@ function movePiece(e) {
         update_state(previous.classList[1], previous.id, e.target.id);
         e.target.classList.add(previous.classList[1]);
         previous.classList.remove(previous.classList[1]);
+
+        if (selectedTime != "unlimited") toggleClock();
         turn = (turn == 'w') ? 'b' : 'w';
 
         king_location = findKing(turn);
         kingInCheck = canAttack(king_location, turn);
         if (kingInCheck && !hasLegalMove(turn)) {
-            console.log("Checkmate");
+            gameOver(1, turn);
+
         }
 
         else if (!kingInCheck && !hasLegalMove(turn)) {
-            console.log("Stalemate");
+            gameOver(0, turn);
         }
     }
 }
