@@ -4,93 +4,53 @@ function handleClick(e) {
         gameStarted = true;
     }
 
-    if (previous == null && e.target.classList.length > 1 && e.target.classList[1][0] == turn) {
+    const destination = e.target.id;
+    const row = +destination[0];
+    const col = +destination[1];
+
+    if (previous == null && board[row][col] != "" && board[row][col][0] == turn) {
         previous = e.target;
         previous.classList.add("selected");
+        move_suggestions(board[row][col], previous.id);
     }
     
     else if (previous != null) {
-        if (e.target.id != previous.id) {
-            if (e.target.classList.length == 2) {
-                if (e.target.classList[1][0] == previous.classList[1][0])
-                changeSelection(e);
+        if (destination != previous.id) {
+            if (board[row][col] !== "" && board[row][col][0] == turn) changeSelection(e);
 
-                else if (valid_move(previous.classList[1], previous.id, e.target.id)) {
-                    capture(e);
-                    resetPrevious();
-                }
-            }
-
-            else if (valid_move(previous.classList[1], previous.id, e.target.id)) {
-                movePiece(e);
+            else if (valid_move(board[previous.id[0]][previous.id[1]], previous.id, destination)) {
+                makeMove(e);
                 resetPrevious();
+                if (!gameEnded) render_board();
             }
-
-            else resetPrevious();
-        }
-        else resetPrevious();
-    }
-}
-
-function capture(e) {
-    update_board(e);
-    king_location = findKing(turn);
-    kingInCheck = canAttack(king_location, turn);
-    
-    if (kingInCheck) {
-        undo_board(e);
-    }
-    else {
-        update_state(previous.classList[1], previous.id, e.target.id);
-        e.target.classList.remove(e.target.classList[1]);
-        e.target.classList.add(previous.classList[1]);
-        previous.classList.remove(previous.classList[1]);
-
-        if (selectedTime != "unlimited") toggleClock();
-        turn = (turn == 'w') ? 'b' : 'w';
-
-        king_location = findKing(turn);
-        kingInCheck = canAttack(king_location, turn);
-        if (kingInCheck && !hasLegalMove(turn)) {
-            gameOver(1, turn);
+            
+            else {
+                resetPrevious();
+                render_board();
+            }
         }
 
-        else if (!kingInCheck && !hasLegalMove(turn)) {
-            gameOver(0, turn);
+        else {
+            resetPrevious();
+            render_board();
         }
     }
 }
 
-function movePiece(e) {
-    update_board(e);
+function makeMove(e) {
+    const move = update_board(e);
+
     king_location = findKing(turn);
     kingInCheck = canAttack(king_location, turn);
 
-    if (kingInCheck) undo_board(e);
-    else {
-        update_state(previous.classList[1], previous.id, e.target.id);
-        e.target.classList.add(previous.classList[1]);
-        previous.classList.remove(previous.classList[1]);
-
-        if (selectedTime != "unlimited") toggleClock();
-        turn = (turn == 'w') ? 'b' : 'w';
-
-        king_location = findKing(turn);
-        kingInCheck = canAttack(king_location, turn);
-        if (kingInCheck && !hasLegalMove(turn)) {
-            gameOver(1, turn);
-
-        }
-
-        else if (!kingInCheck && !hasLegalMove(turn)) {
-            gameOver(0, turn);
-        }
-    }
+    if (kingInCheck) undo_board(move);
+    else update_state(move.movingPiece, previous.id, e.target.id);
 }
 
 function changeSelection(e) {
-    previous.classList.remove("selected");
     previous = e.target;
+    render_board();
+    move_suggestions(board[previous.id[0]][previous.id[1]], previous.id);
     previous.classList.add("selected");
 }
 
@@ -99,5 +59,16 @@ function resetPrevious() {
     previous = null;
 }
 
+function changeTurn() {
+    if (selectedTime != "unlimited") toggleClock();
+    turn = (turn == 'w') ? 'b' : 'w';
+    changeTurnUI();
+    rotate_board();
+    king_location = findKing(turn);
+    kingInCheck = canAttack(king_location, turn);
+    const legalMoveExists = hasLegalMove(turn);
+    if (kingInCheck && !legalMoveExists) gameOver(1, turn);
+    else if (!kingInCheck && !legalMoveExists) gameOver(0, turn);
+}
+
 const handler = (e) => handleClick(e);
-chessBoard.addEventListener("click", handler);

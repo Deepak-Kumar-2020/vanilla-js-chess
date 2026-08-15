@@ -1,43 +1,43 @@
-function attack(piece, current, destination) {
+function attack(piece, source, destination) {
     if (piece[1] == 'b') {
-        return bishop_moves(current, destination);
+        return bishop_moves(source, destination);
     }
 
     else if (piece[1] == 'r') {
-        return rook_moves(current, destination);
+        return rook_moves(source, destination);
     }
 
     else if (piece[1] == 'q') {
-        return bishop_moves(current, destination) || rook_moves(current, destination);
+        return bishop_moves(source, destination) || rook_moves(source, destination);
     }
 
     else if (piece[1] == 'n') {
-        return knight_moves(current, destination);
+        return knight_moves(source, destination);
     }
 
     else if (piece[1] == 'k') {
-        return king_attack(current, destination);
+        return king_attack(source, destination);
     }
 
     else if (piece == "wp") {
-        return wp_attack(current, destination);
+        return wp_attack(source, destination);
     }
 
     else if (piece == "bp") {
-        return bp_attack(current, destination);
+        return bp_attack(source, destination);
     }
 }
 
-function king_attack(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function king_attack(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    for (let i = curr_row - 1; i <= curr_row + 1; i++) {
-        for (let j = curr_col - 1; j <= curr_col + 1; j++) {
-            if (i == dest_row && j == dest_col)
+    for (let i = sourceRow - 1; i <= sourceRow + 1; i++) {
+        for (let j = sourceCol - 1; j <= sourceCol + 1; j++) {
+            if (i == destRow && j == destCol)
             return true;    
         }
     }
@@ -45,22 +45,22 @@ function king_attack(current, destination) {
     return false;
 }
 
-function wp_attack(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function wp_attack(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    return ((curr_col - 1 == dest_col || curr_col + 1 == dest_col) && curr_row - 1 == dest_row);
+    return ((sourceCol - 1 == destCol || sourceCol + 1 == destCol) && sourceRow - 1 == destRow);
 }
 
-function bp_attack(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function bp_attack(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    return ((curr_col - 1 == dest_col || curr_col + 1 == dest_col) && curr_row + 1 == dest_row);
+    return ((sourceCol - 1 == destCol || sourceCol + 1 == destCol) && sourceRow + 1 == destRow);
 }

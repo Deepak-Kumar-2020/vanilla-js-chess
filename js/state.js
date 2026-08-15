@@ -1,4 +1,4 @@
-let turn, previous, gameStarted, 
+let turn, previous, gameStarted, gameEnded, 
     king_location, kingInCheck, 
     br_left, br_right, bk_first_move, 
     wr_left, wr_right, wk_first_move, 
@@ -9,6 +9,7 @@ function setup_state() {
     turn = 'w';
     previous = null;
     gameStarted = false;
+    gameEnded = false;
 
     king_location = null;
     kingInCheck = false;
@@ -36,37 +37,37 @@ function setup_state() {
     ];
 }
 
-function update_state(piece, current, destination) {
-    let curr_row = +current[0], trow = curr_row;
-    let curr_col = +current[1], tcol = curr_col;
+function update_state(piece, source, destination) {
+    let sourceRow = +source[0], trow = sourceRow;
+    let sourceCol = +source[1], tcol = sourceCol;
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
     let color = piece[0];
 
     if (piece[1] == 'r') {
-        if (curr_row == 0) {
-            if (curr_col == 0) br_left = false;
-            else if (curr_col == 7) br_right = false;
+        if (sourceRow == 0) {
+            if (sourceCol == 0) br_left = false;
+            else if (sourceCol == 7) br_right = false;
         }
 
-        if (curr_row == 7) {
-            if (curr_col == 0) wr_left = false;
-            else if (curr_col == 7) wr_right = false;
+        if (sourceRow == 7) {
+            if (sourceCol == 0) wr_left = false;
+            else if (sourceCol == 7) wr_right = false;
         }
     }
 
     else if (piece[1] == 'k') {
-        if (curr_row == dest_row) {        
-            if (curr_col + 2 == dest_col) {
-                update_state_castle(curr_row, 7, dest_col, 1);
-                castle_rook_ui (curr_row, 7, dest_col - 1);
+        if (sourceRow == destRow) {        
+            if (sourceCol + 2 == destCol) {
+                update_state_castle(sourceRow, 7, destCol, 1);
+                castle_rook_ui (sourceRow, 7, destCol - 1);
 
             }
-            else if (curr_col - 2 == dest_col) {
-                update_state_castle(curr_row, 0, dest_col, -1);
-                castle_rook_ui (curr_row, 0, dest_col + 1);
+            else if (sourceCol - 2 == destCol) {
+                update_state_castle(sourceRow, 0, destCol, -1);
+                castle_rook_ui (sourceRow, 0, destCol + 1);
             }
         }
 
@@ -75,15 +76,17 @@ function update_state(piece, current, destination) {
     }
 
     else if ('p' == piece[1]) {
-        if (0 == dest_row || 7 == dest_row)
-        pawn_promotion(color, destination);
+        if (0 == destRow || 7 == destRow) {
+            pawn_promotion(color, destination);
+            return;
+        }
 
-        else if (curr_row - 2 == dest_row || curr_row + 2 == dest_row) {
+        else if (sourceRow - 2 == destRow || sourceRow + 2 == destRow) {
             previous_pawn_move = destination;
             previous_pawn_color = color;
         }
 
-        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1]) {
+        else if (previous_pawn_move != null && sourceRow == previous_pawn_move[0] && destCol == previous_pawn_move[1]) {
             let row = previous_pawn_move[0];
             let col = previous_pawn_move[1];
             board[row][col] = "";
@@ -95,21 +98,33 @@ function update_state(piece, current, destination) {
         previous_pawn_move = null;
         previous_pawn_color = null;
     }
+
+    changeTurn();
 }
 
 function update_board(e) {
-    board[previous.id[0]][previous.id[1]] = "";
-    board[e.target.id[0]][e.target.id[1]] = previous.classList[1];
+    const sourceRow = +previous.id[0];
+    const sourceCol = +previous.id[1];
+    const destRow = +e.target.id[0];
+    const destCol = +e.target.id[1];
+
+    const movingPiece = board[sourceRow][sourceCol];
+    const capturedPiece = board[destRow][destCol];
+
+    board[sourceRow][sourceCol] = "";
+    board[destRow][destCol] = movingPiece;
+
+    return {sourceRow, sourceCol, destRow, destCol, movingPiece, capturedPiece};
 }
 
-function undo_board(e) {
-    board[previous.id[0]][previous.id[1]] = previous.classList[1];
-    board[e.target.id[0]][e.target.id[1]] = "";
+function undo_board(move) {
+    board[move.sourceRow][move.sourceCol] = move.movingPiece;
+    board[move.destRow][move.destCol] = move.capturedPiece;
 }
 
-function update_state_castle(curr_row, rook_col, dest_col, sign) {
-    board[curr_row][dest_col - (sign)] = board[curr_row][rook_col];
-    board[curr_row][rook_col] = "";
+function update_state_castle(sourceRow, rookCol, destCol, sign) {
+    board[sourceRow][destCol - (sign)] = board[sourceRow][rookCol];
+    board[sourceRow][rookCol] = "";
 }
 
 function findKing(color) {

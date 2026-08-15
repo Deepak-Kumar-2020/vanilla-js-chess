@@ -1,74 +1,74 @@
-function valid_move(piece, current, destination) {
+function valid_move(piece, source, destination) {
     if (piece[1] == 'b') {
-        return bishop_moves(current, destination);
+        return bishop_moves(source, destination);
     }
 
     else if (piece[1] == 'r') {
-        return rook_moves(current, destination);
+        return rook_moves(source, destination);
     }
 
     else if (piece[1] == 'q') {
-        return bishop_moves(current, destination) || rook_moves(current, destination);
+        return bishop_moves(source, destination) || rook_moves(source, destination);
     }
 
     else if (piece[1] == 'n') {
-        return knight_moves(current, destination);
+        return knight_moves(source, destination);
     }
 
     else if (piece[1] == 'k') {
-        return king_moves(current, destination, piece[0]);
+        return king_moves(source, destination, piece[0]);
     }
 
     else if (piece == "wp") {
-        return wp_moves(current, destination);
+        return wp_moves(source, destination);
     }
 
     else if (piece == "bp") {
-        return bp_moves(current, destination);
+        return bp_moves(source, destination);
     }
 }
 
-function bishop_moves(current, destination) {
-    let curr_row = +current[0], trow = curr_row;
-    let curr_col = +current[1], tcol = curr_col;
+function bishop_moves(source, destination) {
+    let sourceRow = +source[0], trow = sourceRow;
+    let sourceCol = +source[1], tcol = sourceCol;
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
     // left up
     while (trow > 0 && tcol > 0) {
         trow--; tcol--;
-        if (trow == dest_row && tcol == dest_col)
+        if (trow == destRow && tcol == destCol)
         return true;
 
         else if (board[trow][tcol] !== "") break;
     }
 
     // right up
-    trow = curr_row; tcol = curr_col;
+    trow = sourceRow; tcol = sourceCol;
     while (trow > 0 && tcol < 7) {
         trow--; tcol++;
-        if (trow == dest_row && tcol == dest_col)
+        if (trow == destRow && tcol == destCol)
         return true;
         
         else if (board[trow][tcol] !== "") break;
     }
 
     // left down
-    trow = curr_row; tcol = curr_col;
+    trow = sourceRow; tcol = sourceCol;
     while (trow < 7 && tcol > 0) {
         trow++; tcol--;
-        if (trow == dest_row && tcol == dest_col)
+        if (trow == destRow && tcol == destCol)
         return true;
 
         else if (board[trow][tcol] !== "") break;
     }
 
     // right down
-    trow = curr_row; tcol = curr_col;
+    trow = sourceRow; tcol = sourceCol;
     while (trow < 7 && tcol < 7) {
         trow++; tcol++;
-        if (trow == dest_row && tcol == dest_col)
+        if (trow == destRow && tcol == destCol)
         return true;
 
         else if (board[trow][tcol] !== "") break;
@@ -77,118 +77,118 @@ function bishop_moves(current, destination) {
     return false;
 }
 
+function rook_moves(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-function rook_moves(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
-
-    if (dest_row != curr_row && dest_col != curr_col)
+    if (destRow != sourceRow && destCol != sourceCol)
     return false;
 
     // left
-    let tcol = curr_col;
+    let tcol = sourceCol;
     while (tcol > 0) {
         tcol--;
-        if (curr_row == dest_row && tcol == dest_col)
+        if (sourceRow == destRow && tcol == destCol)
         return true;
 
-        else if (board[curr_row][tcol] !== "") break;
+        else if (board[sourceRow][tcol] !== "") break;
     }
 
     // right
-    tcol = curr_col;
+    tcol = sourceCol;
     while (tcol < 7) {
         tcol++;
-        if (curr_row == dest_row && tcol == dest_col)
+        if (sourceRow == destRow && tcol == destCol)
         return true;
         
-        else if (board[curr_row][tcol] !== "") break;
+        else if (board[sourceRow][tcol] !== "") break;
     }
 
     // up
-    let trow = curr_row;
+    let trow = sourceRow;
     while (trow > 0) {
         trow--;
-        if (trow == dest_row && curr_col == dest_col)
+        if (trow == destRow && sourceCol == destCol)
         return true;
 
-        else if (board[trow][curr_col] !== "") break;
+        else if (board[trow][sourceCol] !== "") break;
     }
 
     // down
-    trow = curr_row;
+    trow = sourceRow;
     while (trow < 7) {
         trow++;
-        if (trow == dest_row && curr_col == dest_col)
+        if (trow == destRow && sourceCol == destCol)
             return true;
 
-        else if (board[trow][curr_col] !== "") break;
+        else if (board[trow][sourceCol] !== "") break;
     }
 
     return false;
 }
 
-function knight_moves(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function knight_moves(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    // let top1 = curr_row - 2
+    // let top1 = sourceRow - 2
     // top1
-    if (curr_row - 2 == dest_row) {
-        if (curr_col - 1 == dest_col)
+    if (sourceRow - 2 == destRow) {
+        if (sourceCol - 1 == destCol)
         return true;
 
-        if (curr_col + 1 == dest_col)
+        if (sourceCol + 1 == destCol)
         return true;
     }
 
     // down
-    if (curr_row + 2 == dest_row) {
-        if (curr_col - 1 == dest_col)
+    if (sourceRow + 2 == destRow) {
+        if (sourceCol - 1 == destCol)
         return true;
         
-        if (curr_col + 1 == dest_col)
+        if (sourceCol + 1 == destCol)
         return true;
     }
 
     // left
-    if (curr_col - 2 == dest_col) {
-        if (curr_row - 1 == dest_row)
+    if (sourceCol - 2 == destCol) {
+        if (sourceRow - 1 == destRow)
         return true;
 
-        if (curr_row + 1 == dest_row)
+        if (sourceRow + 1 == destRow)
         return true;
     }
 
     // right
-    if (curr_col + 2 == dest_col) {
-        if (curr_row - 1 == dest_row)
+    if (sourceCol + 2 == destCol) {
+        if (sourceRow - 1 == destRow)
         return true;
 
-        if (curr_row + 1 == dest_row)
+        if (sourceRow + 1 == destRow)
         return true;
     }
 
     return false;
 }
 
-function king_moves(current, destination, color) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function king_moves(source, destination, color) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
     // castle check on right side
-    if (curr_col + 2 == dest_col && curr_row == dest_row) {
+    if (sourceCol + 2 == destCol && sourceRow == destRow) {
         // squares of castle in check or not
-        let attack_on_squares = canAttack(`${curr_row}${curr_col + 1}`, color) || canAttack(`${curr_row}${curr_col + 2}`, color) || kingInCheck;
+        if (board[sourceRow][sourceCol + 1] != "" || board[sourceRow][sourceCol + 2] != "") return false;
+        let attack_on_squares = canAttack(`${sourceRow}${sourceCol + 1}`, color) || canAttack(`${sourceRow}${sourceCol + 2}`, color) || kingInCheck;
 
         if (color == 'b') {
             if (bk_first_move && br_right && !attack_on_squares)
@@ -202,8 +202,9 @@ function king_moves(current, destination, color) {
     }
 
     // castle check on left side
-    else if (curr_col - 2 == dest_col && curr_row == dest_row) {
-        let attack_on_squares = canAttack(`${curr_row}${curr_col - 1}`, color) || canAttack(`${curr_row}${curr_col - 2}`, color) || kingInCheck;
+    else if (sourceCol - 2 == destCol && sourceRow == destRow) {
+        if (board[sourceRow][sourceCol - 1] != "" || board[sourceRow][sourceCol - 2] != "") return false;
+        let attack_on_squares = canAttack(`${sourceRow}${sourceCol - 1}`, color) || canAttack(`${sourceRow}${sourceCol - 2}`, color) || kingInCheck;
 
         if (color == 'b') {
             if (bk_first_move && br_left && !attack_on_squares)
@@ -216,9 +217,9 @@ function king_moves(current, destination, color) {
         }
     }
 
-    for (let i = curr_row - 1; i <= curr_row + 1; i++) {
-        for (let j = curr_col - 1; j <= curr_col + 1; j++) {
-            if (i == dest_row && j == dest_col)
+    for (let i = sourceRow - 1; i <= sourceRow + 1; i++) {
+        for (let j = sourceCol - 1; j <= sourceCol + 1; j++) {
+            if (i == destRow && j == destCol)
             return true;    
         }
     }
@@ -226,58 +227,58 @@ function king_moves(current, destination, color) {
     return false;
 }
 
-function wp_moves(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function wp_moves(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    if (curr_col == dest_col) {
-        if (curr_row - 2 == dest_row && curr_row == 6) {
-            if (board[curr_row - 1][dest_col] == "" && board[curr_row - 2][dest_col] == "") {
+    if (sourceCol == destCol) {
+        if (sourceRow - 2 == destRow && sourceRow == 6) {
+            if (board[sourceRow - 1][destCol] == "" && board[sourceRow - 2][destCol] == "") {
                 return true;
             }
         }
 
-        else if (curr_row - 1 == dest_row && board[dest_row][dest_col] == "")
+        else if (sourceRow - 1 == destRow && board[destRow][destCol] == "")
         return true;
     }
 
-    else if ((curr_col - 1 == dest_col || curr_col + 1 == dest_col) && curr_row - 1 == dest_row) {
-        if (board[dest_row][dest_col] !== "")
+    else if ((sourceCol - 1 == destCol || sourceCol + 1 == destCol) && sourceRow - 1 == destRow) {
+        if (board[destRow][destCol] !== "")
         return true;
 
-        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1])
+        else if (previous_pawn_move != null && sourceRow == previous_pawn_move[0] && destCol == previous_pawn_move[1])
         return true;
     }
 
     return false;
 }
 
-function bp_moves(current, destination) {
-    let curr_row = +current[0];
-    let curr_col = +current[1];
+function bp_moves(source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
-    let dest_row = +destination[0];
-    let dest_col = +destination[1];
+    let destRow = +destination[0];
+    let destCol = +destination[1];
 
-    if (curr_col == dest_col) {
-        if (curr_row + 2 == dest_row && curr_row == 1) {
-            if (board[curr_row + 1][dest_col] == "" && board[curr_row + 2][dest_col] == "") {
+    if (sourceCol == destCol) {
+        if (sourceRow + 2 == destRow && sourceRow == 1) {
+            if (board[sourceRow + 1][destCol] == "" && board[sourceRow + 2][destCol] == "") {
                 return true;
             }
         }
 
-        else if (curr_row + 1 == dest_row && board[dest_row][dest_col] == "")
+        else if (sourceRow + 1 == destRow && board[destRow][destCol] == "")
         return true;
     }
 
-    else if ((curr_col - 1 == dest_col || curr_col + 1 == dest_col) && curr_row + 1 == dest_row) {
-        if (board[dest_row][dest_col] !== "")
+    else if ((sourceCol - 1 == destCol || sourceCol + 1 == destCol) && sourceRow + 1 == destRow) {
+        if (board[destRow][destCol] !== "")
         return true;
 
-        else if (previous_pawn_move != null && curr_row == previous_pawn_move[0] && dest_col == previous_pawn_move[1])
+        else if (previous_pawn_move != null && sourceRow == previous_pawn_move[0] && destCol == previous_pawn_move[1])
         return true;
     }
 

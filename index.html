@@ -13,9 +13,17 @@
     <script src="./js/threats.js" defer></script>
     <script src="./js/controller.js" defer></script>
     <script src="./js/clock.js" defer></script>
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <body>
     <!-- The Start Menu -->
     <div class="setup-container" id="startMenu">
         <div class="header">
@@ -26,10 +34,10 @@
         <div class="section-title">Players</div>
         <div class="player-inputs">
             <div class="input-group">
-            <input type="text" id="player1" placeholder="Player 1 (White)" value="White">
+                <input type="text" id="player1" aria-label="Player 1 Name" placeholder="Player 1 (White)" value="White">
             </div>
             <div class="input-group">
-            <input type="text" id="player2" placeholder="Player 2 (Black)" value="Black">
+                <input type="text" id="player2" aria-label="Player 2 Name" placeholder="Player 2 (Black)" value="Black">
             </div>
         </div>
 
@@ -61,12 +69,19 @@
             </button>
         </div>
 
+        <div class="flip-board-container">
+            <label for="flipBoardCheck" class="flip-board-label">
+                <input type="checkbox" id="flipBoardCheck" name="board_option" class="flip-board-checkbox"> 
+                Flip board after every move
+            </label>
+        </div>
+
         <button class="start-btn" id="startBtn">Start Game</button>
     </div>
     
     <!-- The Game Area -->
     <div class="flex-container hidden" id="gameArea">
-        <div class="player-info black-name">
+        <div class="player-info" id="black-info">
             <div id="black-clock"></div>
             <div id="black-name">Black</div>
         </div>
@@ -78,7 +93,7 @@
                 <div class="promo_box" id="n"></div>
             </div>
         </div>
-        <div class="player-info white-name">
+        <div class="player-info play" id="white-info">
             <div id="white-clock"></div>
             <div id="white-name">White</div>
         </div>
