@@ -331,52 +331,52 @@ body {
 
 /* Black Pieces */
 .bb {
-    background-image: url('../assets/bb.png');
+    background-image: url('../assets/pieces/bb.png');
 }
 
 .bk {
-    background-image: url('../assets/bk.png');
+    background-image: url('../assets/pieces/bk.png');
 }
 
 .bn {
-    background-image: url('../assets/bn.png');
+    background-image: url('../assets/pieces/bn.png');
 }
 
 .bp {
-    background-image: url('../assets/bp.png');
+    background-image: url('../assets/pieces/bp.png');
 }
 
 .bq {
-    background-image: url('../assets/bq.png');
+    background-image: url('../assets/pieces/bq.png');
 }
 
 .br {
-    background-image: url('../assets/br.png');
+    background-image: url('../assets/pieces/br.png');
 }
 
 /* White Pieces */
 .wb {
-    background-image: url('../assets/wb.png');
+    background-image: url('../assets/pieces/wb.png');
 }
 
 .wk {
-    background-image: url('../assets/wk.png');
+    background-image: url('../assets/pieces/wk.png');
 }
 
 .wn {
-    background-image: url('../assets/wn.png');
+    background-image: url('../assets/pieces/wn.png');
 }
 
 .wp {
-    background-image: url('../assets/wp.png');
+    background-image: url('../assets/pieces/wp.png');
 }
 
 .wq {
-    background-image: url('../assets/wq.png');
+    background-image: url('../assets/pieces/wq.png');
 }
 
 .wr {
-    background-image: url('../assets/wr.png');
+    background-image: url('../assets/pieces/wr.png');
 }
 
 /* pawn promotion */

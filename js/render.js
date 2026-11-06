@@ -106,7 +106,7 @@ function promotionClick(e) {
     promotion_menu.classList.remove("rotated");
     promotion_menu.classList.remove("black-rotated");
     chessBoard.addEventListener("click", handler);
-    changeTurn();
+    changeTurn(pawn, "promote");
 }
 
 function en_passant() {
@@ -133,7 +133,3 @@ function changeTurnUI() {
     whitePlay.classList.toggle("play", 'w' === turn);
     blackPlay.classList.toggle("play",  'b' === turn);
 }
-
-// function inCheck() {
-
-// }

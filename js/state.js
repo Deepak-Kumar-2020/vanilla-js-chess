@@ -37,14 +37,15 @@ function setup_state() {
     ];
 }
 
-function update_state(piece, source, destination) {
-    let sourceRow = +source[0], trow = sourceRow;
-    let sourceCol = +source[1], tcol = sourceCol;
+function update_state(piece, capturedPiece, source, destination) {
+    let sourceRow = +source[0];
+    let sourceCol = +source[1];
 
     let destRow = +destination[0];
     let destCol = +destination[1];
 
     let color = piece[0];
+    let sound = capturedPiece === "" ? "move" : "capture";
 
     if (piece[1] == 'r') {
         if (sourceRow == 0) {
@@ -63,11 +64,12 @@ function update_state(piece, source, destination) {
             if (sourceCol + 2 == destCol) {
                 update_state_castle(sourceRow, 7, destCol, 1);
                 castle_rook_ui (sourceRow, 7, destCol - 1);
-
+                sound = "castle";
             }
             else if (sourceCol - 2 == destCol) {
                 update_state_castle(sourceRow, 0, destCol, -1);
                 castle_rook_ui (sourceRow, 0, destCol + 1);
+                sound = "castle";
             }
         }
 
@@ -91,15 +93,39 @@ function update_state(piece, source, destination) {
             let col = previous_pawn_move[1];
             board[row][col] = "";
             en_passant();
+            sound = "capture";
         }
     }
+
+    changeTurn(color, sound);
+}
+
+function changeTurn(color, sound) {
+    if (selectedTime !== "unlimited") toggleClock();
+    turn = (turn == 'w') ? 'b' : 'w';
+    changeTurnUI();
+    rotate_board();
 
     if (previous_pawn_color != color) {
         previous_pawn_move = null;
         previous_pawn_color = null;
     }
 
-    changeTurn();
+    king_location = findKing(turn);
+    kingInCheck = canAttack(king_location, turn);
+    const legalMoveExists = hasLegalMove(turn);
+    
+    if (kingInCheck && !legalMoveExists) {
+        playSound("gameOver");
+        gameOver(1, turn);
+    }
+    else if (!kingInCheck && !legalMoveExists) {
+        playSound("gameOver");
+        gameOver(0, turn);
+    }
+
+    else if (kingInCheck) playSound("check");
+    else if (sound !== "promote") playSound(sound);    
 }
 
 function update_board(e) {

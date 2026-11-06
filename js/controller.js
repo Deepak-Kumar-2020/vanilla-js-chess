@@ -44,7 +44,7 @@ function makeMove(e) {
     kingInCheck = canAttack(king_location, turn);
 
     if (kingInCheck) undo_board(move);
-    else update_state(move.movingPiece, previous.id, e.target.id);
+    else update_state(move.movingPiece, move.capturedPiece, previous.id, e.target.id);
 }
 
 function changeSelection(e) {
@@ -57,18 +57,6 @@ function changeSelection(e) {
 function resetPrevious() {
     previous.classList.remove("selected");
     previous = null;
-}
-
-function changeTurn() {
-    if (selectedTime != "unlimited") toggleClock();
-    turn = (turn == 'w') ? 'b' : 'w';
-    changeTurnUI();
-    rotate_board();
-    king_location = findKing(turn);
-    kingInCheck = canAttack(king_location, turn);
-    const legalMoveExists = hasLegalMove(turn);
-    if (kingInCheck && !legalMoveExists) gameOver(1, turn);
-    else if (!kingInCheck && !legalMoveExists) gameOver(0, turn);
 }
 
 const handler = (e) => handleClick(e);

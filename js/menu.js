@@ -81,7 +81,7 @@ function gameOver(cause, loser) {
     setTimeout(() => {
         gameArea.classList.add("hidden");
         gameOverScreen.classList.remove("hidden");
-    }, 2400);
+    }, 3000);
     
 }
 
